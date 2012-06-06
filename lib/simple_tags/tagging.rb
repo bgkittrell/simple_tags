@@ -1,6 +1,10 @@
 class Tagging < ActiveRecord::Base
   belongs_to :taggable, :polymorphic => true
 
+  def self.all_tags
+    Tagging.select("tag").uniq.all.map { |t| t.tag }
+  end
+
   def self.parse(list)
     tag_names = []
 
