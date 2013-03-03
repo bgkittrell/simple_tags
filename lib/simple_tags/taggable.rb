@@ -47,13 +47,14 @@
           after_save :save_tags
         end
 
-        def find_tagged_with(list)
+        def find_tagged_with(list, scope_id = nil)
           find_by_sql([
             "SELECT #{table_name}.* FROM #{table_name}, taggings " +
             "WHERE #{table_name}.#{primary_key} = taggings.taggable_id " +
             "AND taggings.taggable_type = ? " +
-            "AND taggings.tag IN (?)",
-            simple_tags_options[:taggable_type], list
+            "AND taggings.tag IN (?) " +
+            (scope_id ? "AND taggings.scope_id = ?" : ""),
+            simple_tags_options[:taggable_type], list, scope_id
           ])
         end
       end
